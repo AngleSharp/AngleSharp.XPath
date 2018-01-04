@@ -1,5 +1,4 @@
 ﻿using AngleSharp.Dom;
-using AngleSharp.Dom.Html;
 using System;
 using System.Xml;
 using System.Xml.XPath;
@@ -18,18 +17,8 @@ namespace AngleSharp.XPath
 
 		public HtmlDocumentNavigator(IDocument document, INode currentNode)
 		{
-			if (document == null)
-			{
-				throw new ArgumentNullException(nameof(document));
-			}
-
-			if (currentNode == null)
-			{
-				throw new ArgumentNullException(nameof(currentNode));
-			}
-
-			_document = document;
-			_currentNode = currentNode;
+			_document = document ?? throw new ArgumentNullException(nameof(document));
+			_currentNode = currentNode ?? throw new ArgumentNullException(nameof(currentNode));
 			_nameTable = new NameTable();
 			_attrIndex = -1;
 		}
@@ -38,15 +27,9 @@ namespace AngleSharp.XPath
 
 		public INode CurrentNode => _currentNode;
 
-		public IElement CurrentElement => CurrentNode as IElement;
+		private IElement CurrentElement => CurrentNode as IElement;
 
-		public override bool HasAttributes
-		{
-			get
-			{
-				return CurrentElement != null && CurrentElement.Attributes.Length > 0;
-			}
-		}
+		public override bool HasAttributes => CurrentElement != null && CurrentElement.Attributes.Length > 0;
 
 		public override bool IsEmptyElement => !_currentNode.HasChildNodes;
 
@@ -135,15 +118,15 @@ namespace AngleSharp.XPath
 				switch (_currentNode.NodeType)
 				{
 					case Dom.NodeType.Attribute:
-						IAttr attr = (IAttr)_currentNode;
+						var attr = (IAttr)_currentNode;
 						return attr.Value;
 
 					case Dom.NodeType.CharacterData:
-						ICharacterData cdata = (ICharacterData)_currentNode;
+						var cdata = (ICharacterData)_currentNode;
 						return cdata.Data;
 
 					case Dom.NodeType.Comment:
-						IComment comment = (IComment)_currentNode;
+						var comment = (IComment)_currentNode;
 						return comment.Data;
 
 					case Dom.NodeType.Document:
@@ -153,7 +136,7 @@ namespace AngleSharp.XPath
 						return _currentNode.TextContent;
 
 					case Dom.NodeType.DocumentType:
-						IDocumentType documentType = (IDocumentType)_currentNode;
+						var documentType = (IDocumentType)_currentNode;
 						return documentType.Name;
 
 					case Dom.NodeType.Element:
@@ -174,7 +157,7 @@ namespace AngleSharp.XPath
 						return _currentNode.TextContent;
 
 					case Dom.NodeType.ProcessingInstruction:
-						IProcessingInstruction instruction = (IProcessingInstruction)_currentNode;
+						var instruction = (IProcessingInstruction)_currentNode;
 						return instruction.Target;
 
 					case Dom.NodeType.Text:
@@ -191,16 +174,9 @@ namespace AngleSharp.XPath
 			return new HtmlDocumentNavigator(_document, _currentNode);
 		}
 
-		public override string GetNamespace(string name)
-		{
-			return base.GetNamespace(name);
-		}
-
 		public override bool IsSamePosition(XPathNavigator other)
 		{
-			HtmlDocumentNavigator navigator = other as HtmlDocumentNavigator;
-
-			if (navigator == null)
+			if (!(other is HtmlDocumentNavigator navigator))
 			{
 				return false;
 			}
@@ -208,16 +184,9 @@ namespace AngleSharp.XPath
 			return navigator._currentNode == _currentNode;
 		}
 
-		public override bool MoveToAttribute(string localName, string namespaceURI)
-		{
-			return base.MoveToAttribute(localName, namespaceURI);
-		}
-
 		public override bool MoveTo(XPathNavigator other)
 		{
-			HtmlDocumentNavigator navigator = other as HtmlDocumentNavigator;
-
-			if (navigator == null)
+			if (!(other is HtmlDocumentNavigator navigator))
 			{
 				return false;
 			}

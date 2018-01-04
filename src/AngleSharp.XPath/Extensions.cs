@@ -44,15 +44,15 @@ namespace AngleSharp.XPath
 				throw new ArgumentNullException(nameof(xpath));
 			}
 
-			HtmlDocumentNavigator nav = new HtmlDocumentNavigator(element.Owner, element);
-			XPathNodeIterator it = nav.Select(xpath);
+			var nav = new HtmlDocumentNavigator(element.Owner, element);
+			var it = nav.Select(xpath);
 
 			if (!it.MoveNext())
 			{
 				return null;
 			}
 
-			HtmlDocumentNavigator node = (HtmlDocumentNavigator)it.Current;
+			var node = (HtmlDocumentNavigator)it.Current;
 			return node.CurrentNode;
 		}
 	}

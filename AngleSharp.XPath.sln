@@ -1,18 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8B85F292-66CA-44A2-950E-1F81A3E7ECD5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C6856E2-614E-4528-B356-F22F6E2E37EB}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AngleSharp.XPath", "src\AngleSharp.XPath\AngleSharp.XPath.csproj", "{247B6597-EFDC-4A4D-BBB2-B26CFD15FBBD}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AngleSharp.XPath", "src\AngleSharp.XPath\AngleSharp.XPath.xproj", "{247B6597-EFDC-4A4D-BBB2-B26CFD15FBBD}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AngleSharp.XPath.Tests", "src\AngleSharp.XPath.Tests\AngleSharp.XPath.Tests.xproj", "{5BA4134A-2E43-4219-893D-85F1481A0FCC}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AngleSharp.XPath.Tests", "src\AngleSharp.XPath.Tests\AngleSharp.XPath.Tests.csproj", "{5BA4134A-2E43-4219-893D-85F1481A0FCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
