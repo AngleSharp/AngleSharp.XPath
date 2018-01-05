@@ -1,5 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Version>1.0.0</Version>
+    <Authors>Denis Ivanov</Authors>
+    <PackageId>AngleSharp.XPath</PackageId>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <Description>XPath support for AngleSharp</Description>
+    <PackageProjectUrl>https://github.com/denis-ivanov/AngleSharp.XPath/</PackageProjectUrl>
+    <PackageTags>HTML XPath AngleSharp</PackageTags>
+  </PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
