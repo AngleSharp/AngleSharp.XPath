@@ -3,8 +3,8 @@
     <Version>1.0.0</Version>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
     <Description>XPath support for AngleSharp</Description>
     <PackageProjectUrl>https://github.com/denis-ivanov/AngleSharp.XPath/</PackageProjectUrl>
     <PackageTags>HTML XPath AngleSharp</PackageTags>
