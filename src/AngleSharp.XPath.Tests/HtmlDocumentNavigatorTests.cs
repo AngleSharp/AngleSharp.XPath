@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AngleSharp.Parser.Html;
 using AngleSharp.XPath;
 
 namespace AngleSharp.XPath.Tests
@@ -23,6 +24,26 @@ namespace AngleSharp.XPath.Tests
 
 			// Assert
 			Assert.That(content, Is.Not.Null);
+		}
+
+		[Test]
+		public void SelectNodes_SelectList_ShouldReturnList()
+		{
+			// Arrange
+			const string html = 
+			@"<ol>
+				<li>First</li>
+				<li>Second</li>
+				<li>Third</li>
+			</ol>";
+			var parser = new HtmlParser();
+			var document = parser.Parse(html);
+
+			// Act
+			var nodes = document.DocumentElement.SelectNodes("//li");
+
+			// Assert
+			Assert.That(nodes, Has.Count.EqualTo(3));
 		}
 	}
 }
