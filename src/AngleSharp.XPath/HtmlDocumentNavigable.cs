@@ -22,48 +22,27 @@
 // SOFTWARE.
 #endregion
 
-using NUnit.Framework;
-using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using System;
+using System.Xml.XPath;
+using AngleSharp.Dom.Html;
 
-namespace AngleSharp.XPath.Tests
+namespace AngleSharp.XPath
 {
-	[TestFixture]
-	public class HtmlDocumentNavigatorTests
-	{
-		[Test, Retry(5)]
-		public async Task SelectSinleNodeTest()
-		{
-			// Arrange
-			const string address = "https://stackoverflow.com/questions/39471800/is-anglesharps-htmlparser-threadsafe";
-			var config = Configuration.Default.WithDefaultLoader();
-			var document = await BrowsingContext.New(config).OpenAsync(address);
+    /// <inheritdoc />
+    public class HtmlDocumentNavigable : IXPathNavigable
+    {
+        private readonly IHtmlDocument _document;
 
-			// Act
-			var content = document.DocumentElement.SelectSingleNode("//div[@id='content']");
+        /// <inheritdoc />
+        public HtmlDocumentNavigable(IHtmlDocument document)
+        {
+            _document = document ?? throw new ArgumentNullException(nameof(document));
+        }
 
-			// Assert
-			Assert.That(content, Is.Not.Null);
-		}
-
-		[Test]
-		public void SelectNodes_SelectList_ShouldReturnList()
-		{
-			// Arrange
-			const string html = 
-			@"<ol>
-				<li>First</li>
-				<li>Second</li>
-				<li>Third</li>
-			</ol>";
-			var parser = new HtmlParser();
-			var document = parser.Parse(html);
-
-			// Act
-			var nodes = document.DocumentElement.SelectNodes("//li");
-
-			// Assert
-			Assert.That(nodes, Has.Count.EqualTo(3));
-		}
-	}
+        /// <inheritdoc />
+        public XPathNavigator CreateNavigator()
+        {
+            return _document.CreateNavigator();
+        }
+    }
 }
