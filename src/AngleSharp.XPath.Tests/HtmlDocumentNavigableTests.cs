@@ -22,48 +22,39 @@
 // SOFTWARE.
 #endregion
 
-using NUnit.Framework;
-using System.Threading.Tasks;
+using System;
 using AngleSharp.Parser.Html;
+using NUnit.Framework;
 
 namespace AngleSharp.XPath.Tests
 {
-	[TestFixture]
-	public class HtmlDocumentNavigatorTests
-	{
-		[Test, Retry(5)]
-		public async Task SelectSinleNodeTest()
-		{
-			// Arrange
-			const string address = "https://stackoverflow.com/questions/39471800/is-anglesharps-htmlparser-threadsafe";
-			var config = Configuration.Default.WithDefaultLoader();
-			var document = await BrowsingContext.New(config).OpenAsync(address);
+    [TestFixture]
+    public class HtmlDocumentNavigableTests
+    {
+        [Test]
+        public void Ctor_NullDocumentArgument_DoesThrowException()
+        {
+            // Arrange
+            
+            // Act
+            
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new HtmlDocumentNavigable(null));
+        }
 
-			// Act
-			var content = document.DocumentElement.SelectSingleNode("//div[@id='content']");
+        [Test]
+        public void CreateNavigator_Call_ShouldReturnHtmlDocumentNavigator()
+        {
+            // Arrange
+            var parser = new HtmlParser();
+            var document = parser.Parse("<html></html>");
+            var navigable = new HtmlDocumentNavigable(document);
 
-			// Assert
-			Assert.That(content, Is.Not.Null);
-		}
+            // Act
+            var navigator = navigable.CreateNavigator();
 
-		[Test]
-		public void SelectNodes_SelectList_ShouldReturnList()
-		{
-			// Arrange
-			const string html = 
-			@"<ol>
-				<li>First</li>
-				<li>Second</li>
-				<li>Third</li>
-			</ol>";
-			var parser = new HtmlParser();
-			var document = parser.Parse(html);
-
-			// Act
-			var nodes = document.DocumentElement.SelectNodes("//li");
-
-			// Assert
-			Assert.That(nodes, Has.Count.EqualTo(3));
-		}
-	}
+            // Assert
+            Assert.That(navigator, Is.TypeOf<HtmlDocumentNavigator>());
+        }
+    }
 }
