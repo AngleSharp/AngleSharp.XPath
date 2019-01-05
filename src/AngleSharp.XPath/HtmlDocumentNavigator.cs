@@ -1,63 +1,52 @@
-﻿#region License
-// MIT License
-//
-// Copyright (c) 2018 Denis Ivanov
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-#endregion
-
-using AngleSharp.Dom;
-using System;
-using System.Xml;
-using System.Xml.XPath;
-
 namespace AngleSharp.XPath
 {
-	public class HtmlDocumentNavigator : XPathNavigator
+    using AngleSharp.Dom;
+    using System;
+    using System.Xml;
+    using System.Xml.XPath;
+
+    /// <inheritdoc />
+    public class HtmlDocumentNavigator : XPathNavigator
 	{
 		private readonly IDocument _document;
+        private readonly NameTable _nameTable;
+        private INode _currentNode;
+		private Int32 _attrIndex;
 
-		private INode _currentNode;
-
-		private int _attrIndex;
-
-		private readonly NameTable _nameTable;
-
+        /// <summary>
+        /// Creates a new XPath navigator for the given document using the provided root node.
+        /// </summary>
+        /// <param name="document">The document to navigate.</param>
+        /// <param name="currentNode">The node to start navigation.</param>
 		public HtmlDocumentNavigator(IDocument document, INode currentNode)
 		{
 			_document = document ?? throw new ArgumentNullException(nameof(document));
-			_currentNode = currentNode ?? throw new ArgumentNullException(nameof(currentNode));
-			_nameTable = new NameTable();
+            _nameTable = new NameTable();
+            _currentNode = currentNode ?? throw new ArgumentNullException(nameof(currentNode));
 			_attrIndex = -1;
 		}
 
-		public override string BaseURI => _document.BaseUri;
+        /// <inheritdoc />
+        public override String BaseURI => _document.BaseUri;
 
+        /// <summary>
+        /// Gets the currently selected node.
+        /// </summary>
 		public INode CurrentNode => _currentNode;
 
+        /// <summary>
+        /// Gets the currently selected element.
+        /// </summary>
 		private IElement CurrentElement => CurrentNode as IElement;
 
-		public override bool HasAttributes => CurrentElement != null && CurrentElement.Attributes.Length > 0;
+        /// <inheritdoc />
+        public override Boolean HasAttributes => CurrentElement != null && CurrentElement.Attributes.Length > 0;
 
-		public override bool IsEmptyElement => !_currentNode.HasChildNodes;
+        /// <inheritdoc />
+        public override Boolean IsEmptyElement => !_currentNode.HasChildNodes;
 
-		public override string LocalName
+        /// <inheritdoc />
+        public override String LocalName
 		{
 			get
 			{
@@ -75,13 +64,17 @@ namespace AngleSharp.XPath
 			}
 		}
 
-		public override string Name => NameTable.GetOrAdd(_currentNode.NodeName);
+        /// <inheritdoc />
+        public override String Name => NameTable.GetOrAdd(_currentNode.NodeName);
 
-		public override string NamespaceURI => string.Empty;// NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty);
+        /// <inheritdoc />
+        public override String NamespaceURI => String.Empty;// NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty);
 
-		public override XmlNameTable NameTable => _nameTable;
+        /// <inheritdoc />
+        public override XmlNameTable NameTable => _nameTable;
 
-		public override XPathNodeType NodeType
+        /// <inheritdoc />
+        public override XPathNodeType NodeType
 		{
 			get
 			{
@@ -133,9 +126,11 @@ namespace AngleSharp.XPath
 			}
 		}
 
-		public override string Prefix => string.Empty;// _nameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
+        /// <inheritdoc />
+        public override String Prefix => String.Empty;// _nameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
 
-		public override string Value
+        /// <inheritdoc />
+        public override String Value
 		{
 			get
 			{
@@ -193,12 +188,14 @@ namespace AngleSharp.XPath
 			}
 		}
 
-		public override XPathNavigator Clone()
+        /// <inheritdoc />
+        public override XPathNavigator Clone()
 		{
 			return new HtmlDocumentNavigator(_document, _currentNode);
 		}
 
-		public override bool IsSamePosition(XPathNavigator other)
+        /// <inheritdoc />
+        public override Boolean IsSamePosition(XPathNavigator other)
 		{
 			if (!(other is HtmlDocumentNavigator navigator))
 			{
@@ -208,7 +205,8 @@ namespace AngleSharp.XPath
 			return navigator._currentNode == _currentNode;
 		}
 
-		public override bool MoveTo(XPathNavigator other)
+        /// <inheritdoc />
+        public override Boolean MoveTo(XPathNavigator other)
 		{
 			if (!(other is HtmlDocumentNavigator navigator))
 			{
@@ -225,7 +223,8 @@ namespace AngleSharp.XPath
 			return false;
 		}
 
-		public override bool MoveToFirstAttribute()
+        /// <inheritdoc />
+        public override Boolean MoveToFirstAttribute()
 		{
 			if (HasAttributes)
 			{
@@ -236,7 +235,8 @@ namespace AngleSharp.XPath
 			return false;
 		}
 
-		public override bool MoveToFirstChild()
+        /// <inheritdoc />
+        public override Boolean MoveToFirstChild()
 		{
 			if (_currentNode.FirstChild == null)
 			{
@@ -247,14 +247,16 @@ namespace AngleSharp.XPath
 			return true;
 		}
 
-		public override bool MoveToFirstNamespace(XPathNamespaceScope namespaceScope)
+        /// <inheritdoc />
+        public override Boolean MoveToFirstNamespace(XPathNamespaceScope namespaceScope)
 		{
 			return false;
 		}
 
-		public override bool MoveToId(string id)
+        /// <inheritdoc />
+        public override Boolean MoveToId(String id)
 		{
-			IElement elementById = _document.GetElementById(id);
+			var elementById = _document.GetElementById(id);
 
 			if (elementById == null)
 			{
@@ -265,7 +267,8 @@ namespace AngleSharp.XPath
 			return true;
 		}
 
-		public override bool MoveToNext()
+        /// <inheritdoc />
+        public override Boolean MoveToNext()
 		{
 			if (_currentNode.NextSibling == null)
 			{
@@ -276,7 +279,8 @@ namespace AngleSharp.XPath
 			return true;
 		}
 
-		public override bool MoveToNextAttribute()
+        /// <inheritdoc />
+        public override Boolean MoveToNextAttribute()
 		{
 			if (CurrentElement == null)
 			{
@@ -292,12 +296,14 @@ namespace AngleSharp.XPath
 			return true;
 		}
 
-		public override bool MoveToNextNamespace(XPathNamespaceScope namespaceScope)
+        /// <inheritdoc />
+        public override Boolean MoveToNextNamespace(XPathNamespaceScope namespaceScope)
 		{
 			return false;
 		}
 
-		public override bool MoveToParent()
+        /// <inheritdoc />
+        public override Boolean MoveToParent()
 		{
 			if (_currentNode.Parent == null)
 			{
@@ -308,7 +314,8 @@ namespace AngleSharp.XPath
 			return true;
 		}
 
-		public override bool MoveToPrevious()
+        /// <inheritdoc />
+        public override Boolean MoveToPrevious()
 		{
 			if (_currentNode.PreviousSibling == null)
 			{
@@ -319,7 +326,8 @@ namespace AngleSharp.XPath
 			return true;
 		}
 
-		public override void MoveToRoot()
+        /// <inheritdoc />
+        public override void MoveToRoot()
 		{
 			_currentNode = _document.DocumentElement;
 		}

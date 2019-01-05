@@ -1,5 +1,5 @@
 language: csharp
-solution: AngleSharp.XPath.sln
+solution: src/AngleSharp.XPath.sln
 dotnet  : 2.0.3
 script  :
   - dotnet restore

@@ -1,22 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.0.2</Version>
+    <Version>1.1.0</Version>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
-    <AssemblyVersion>1.0.2</AssemblyVersion>
-    <FileVersion>1.0.2</FileVersion>
-    <Description>XPath support for AngleSharp</Description>
-    <PackageProjectUrl>https://github.com/denis-ivanov/AngleSharp.XPath/</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/denis-ivanov/AngleSharp.XPath/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>HTML XPath AngleSharp</PackageTags>
-  </PropertyGroup>
-  <PropertyGroup>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <AssemblyName>AngleSharp.XPath</AssemblyName>
+    <RootNamespace>AngleSharp.XPath</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <FileVersion>1.1.0</FileVersion>
+    <Description>XPath support for AngleSharp</Description>
+    <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/AngleSharp/AngleSharp.XPath/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>HTML XPath AngleSharp</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.9.1" />
+    <PackageReference Include="AngleSharp" Version="0.10.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
   </ItemGroup>
+
+  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
 </Project>
