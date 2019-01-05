@@ -21,9 +21,24 @@ var contentNode = document.Body.SelectSingleNode("//div[@id='content']");
 
 Besides `SelectSingleNode` we can also use `SelectNodes`. Both are extension methods defined in the `AngleSharp.XPath` namespace.
 
+If wanted we can also use XPath directly in CSS selectors such as in `QuerySelector` or `QuerySelectorAll` calls. For this we only need to apply the following configuration:
+
+```cs
+var config = Configuration.Default.WithXPath();
+```
+
+Now we can write queries such as
+
+```cs
+var secondLi = document.QuerySelector("*[xpath>'//li[2]']");
+```
+
+It is important that the original selector has all elements (`*`) as the intersection of the ordinary CSS selector and the XPath attribute is considered. The XPath attribute consists of a head (`xpath>`) and a value - provided as a string, e.g., `//li[2]`.
+
 ## Features
 
 - Uses `XPathNavigator` from `System.Xml.XPath`
+- Includes XPath capabilities to CSS query selectors if wanted
 
 ## Participating
 
