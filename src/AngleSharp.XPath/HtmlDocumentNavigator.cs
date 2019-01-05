@@ -91,14 +91,8 @@ namespace AngleSharp.XPath
 
 					case Dom.NodeType.Document:
 						return XPathNodeType.Element;
-
-					//case Dom.NodeType.DocumentFragment:
-					//	return XPathNodeType.;
-
-					//case Dom.NodeType.DocumentType:
-					//	return XPathNodeType.;
-
-					case Dom.NodeType.Element:
+                        
+                    case Dom.NodeType.Element:
 						if (_attrIndex != -1)
 						{
 							return XPathNodeType.Attribute;
@@ -106,21 +100,18 @@ namespace AngleSharp.XPath
 
 						return XPathNodeType.Element;
 
-					//case Dom.NodeType.Entity:
-					//	return XPathNodeType.en;
-
-					//case Dom.NodeType.EntityReference:
-
-					//case Dom.NodeType.Notation:
-					//	return XPathNodeType.;
-
-					case Dom.NodeType.ProcessingInstruction:
+                    case Dom.NodeType.ProcessingInstruction:
 						return XPathNodeType.ProcessingInstruction;
 
 					case Dom.NodeType.Text:
 						return XPathNodeType.Text;
 
-					default:
+                    case Dom.NodeType.Entity:
+                    case Dom.NodeType.EntityReference:
+                    case Dom.NodeType.Notation:
+                    case Dom.NodeType.DocumentFragment:
+                    case Dom.NodeType.DocumentType:
+                    default:
 						throw new NotImplementedException();
 				}
 			}
