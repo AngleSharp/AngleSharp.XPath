@@ -10,7 +10,7 @@
     <FileVersion>1.1.0</FileVersion>
     <Description>XPath support for AngleSharp</Description>
     <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/AngleSharp/AngleSharp.XPath/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>HTML XPath AngleSharp</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
