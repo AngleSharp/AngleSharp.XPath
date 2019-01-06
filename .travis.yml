@@ -1,7 +1,7 @@
 language: csharp
-solution: AngleSharp.XPath.sln
+solution: src/AngleSharp.XPath.sln
 dotnet  : 2.0.3
 script  :
-  - dotnet restore
-  - dotnet build
+  - dotnet restore src/AngleSharp.XPath.sln
+  - dotnet build src/AngleSharp.XPath.sln
   - dotnet test ./**/*Tests/
