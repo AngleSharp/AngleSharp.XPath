@@ -15,7 +15,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PublicSign>true</PublicSign>
+    <PublicSign>True</PublicSign>
   </PropertyGroup>
 
   <ItemGroup>
