@@ -8,7 +8,7 @@ namespace AngleSharp.XPath.Tests
 	public class HtmlDocumentNavigatorTests
 	{
 		[Test, Retry(5)]
-		public async Task SelectSinleNodeTest()
+		public async Task SelectSingleNodeTest()
 		{
 			// Arrange
 			const string address = "https://stackoverflow.com/questions/39471800/is-anglesharps-htmlparser-threadsafe";
@@ -41,5 +41,25 @@ namespace AngleSharp.XPath.Tests
 			// Assert
 			Assert.That(nodes, Has.Count.EqualTo(3));
 		}
+        
+        [Test]
+        public void SelectPrecedingNodeInDocumentWithDoctype_ShouldReturnNode()
+        {
+            // Arrange
+            const string html = 
+			@"<!DOCTYPE html>
+			<body>
+				<span></span>
+				<div></div>
+			</body>";
+			var parser = new HtmlParser();
+			var document = parser.ParseDocument(html);
+
+			// Act
+			var node = document.DocumentElement.SelectSingleNode("//div/preceding::span");
+
+			// Assert
+			Assert.That(node, Is.Not.Null);
+        }
 	}
 }
