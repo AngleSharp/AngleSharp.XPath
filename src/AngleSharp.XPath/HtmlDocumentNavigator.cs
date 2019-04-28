@@ -91,6 +91,9 @@ namespace AngleSharp.XPath
 
 					case Dom.NodeType.Document:
 						return XPathNodeType.Element;
+
+					case Dom.NodeType.DocumentType:
+						return XPathNodeType.Element;
                         
                     case Dom.NodeType.Element:
 						if (_attrIndex != -1)
@@ -110,7 +113,6 @@ namespace AngleSharp.XPath
                     case Dom.NodeType.EntityReference:
                     case Dom.NodeType.Notation:
                     case Dom.NodeType.DocumentFragment:
-                    case Dom.NodeType.DocumentType:
                     default:
 						throw new NotImplementedException();
 				}
