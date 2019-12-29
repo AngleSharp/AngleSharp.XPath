@@ -8,6 +8,7 @@ namespace AngleSharp.XPath
     /// <inheritdoc />
     public class HtmlDocumentNavigator : XPathNavigator
 	{
+        private bool _enableNamespaces = false;
 		private readonly IDocument _document;
         private readonly NameTable _nameTable;
         private INode _currentNode;
@@ -18,13 +19,24 @@ namespace AngleSharp.XPath
         /// </summary>
         /// <param name="document">The document to navigate.</param>
         /// <param name="currentNode">The node to start navigation.</param>
-		public HtmlDocumentNavigator(IDocument document, INode currentNode)
+        /// <param name="enableNamespaces">Enable namespaces or not</param>
+		public HtmlDocumentNavigator(IDocument document, INode currentNode,bool enableNamespaces)
 		{
 			_document = document ?? throw new ArgumentNullException(nameof(document));
             _nameTable = new NameTable();
             _currentNode = currentNode ?? throw new ArgumentNullException(nameof(currentNode));
 			_attrIndex = -1;
+            _enableNamespaces = enableNamespaces;
 		}
+        /// <summary>
+        /// Creates a new XPath navigator for the given document using the provided root node.
+        /// </summary>
+        /// <param name="document">The document to navigate.</param>
+        /// <param name="currentNode">The node to start navigation.</param>
+        public HtmlDocumentNavigator(IDocument document, INode currentNode):this(document,currentNode,false)
+        {
+
+        }
 
         /// <inheritdoc />
         public override String BaseURI => _document.BaseUri;
@@ -68,7 +80,7 @@ namespace AngleSharp.XPath
         public override String Name => NameTable.GetOrAdd(_currentNode.NodeName);
 
         /// <inheritdoc />
-        public override String NamespaceURI => String.Empty;// NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty);
+        public override String NamespaceURI => _enableNamespaces ? NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty) : string.Empty;
 
         /// <inheritdoc />
         public override XmlNameTable NameTable => _nameTable;
@@ -120,7 +132,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override String Prefix => String.Empty;// _nameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
+        public override String Prefix => _enableNamespaces ? _nameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty) : string.Empty;
 
         /// <inheritdoc />
         public override String Value
@@ -184,7 +196,7 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override XPathNavigator Clone()
 		{
-			return new HtmlDocumentNavigator(_document, _currentNode);
+			return new HtmlDocumentNavigator(_document, _currentNode,_enableNamespaces);
 		}
 
         /// <inheritdoc />
@@ -322,7 +334,7 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override void MoveToRoot()
 		{
-			_currentNode = _document.DocumentElement;
+			_currentNode = _document;
 		}
 	}
 }

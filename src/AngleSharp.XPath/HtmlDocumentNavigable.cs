@@ -24,4 +24,24 @@ namespace AngleSharp.XPath
             return _document.CreateNavigator();
         }
     }
+    /// <inheritdoc />
+    public class HtmlDocumentNavigableNS : IXPathNavigable
+    {
+        private readonly IDocument _document;
+
+        /// <summary>
+        /// Creates a new wrapper for navigations regarding the provided document.
+        /// </summary>
+        /// <param name="document">The document to create navigators for.</param>
+        public HtmlDocumentNavigableNS(IDocument document)
+        {
+            _document = document ?? throw new ArgumentNullException(nameof(document));
+        }
+
+        /// <inheritdoc />
+        public XPathNavigator CreateNavigator()
+        {
+            return _document.CreateNavigatorNS();
+        }
+    }
 }

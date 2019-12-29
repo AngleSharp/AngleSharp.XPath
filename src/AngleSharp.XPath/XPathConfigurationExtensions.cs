@@ -21,7 +21,20 @@ namespace AngleSharp
             if (selectorFactory != null)
             {
                 selectorFactory.Unregister(">");
-                selectorFactory.Register(">", (name, value, prefix, mode) => new XPathAttrSelector(value));
+                selectorFactory.Register(">", (name, value, prefix, mode) =>
+                {
+                    //if ("xpath".Equals(name, System.StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //}
+                    if ("xpathns".Equals(name, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        return new XPathNSAttrSelector(value);
+                    }
+                    else
+                    {
+                        return new XPathAttrSelector(value);
+                    }
+                });
             }
 
             return configuration;
