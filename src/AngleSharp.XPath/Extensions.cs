@@ -16,11 +16,12 @@ namespace AngleSharp.XPath
         /// Creates a new navigator for the given document.
         /// </summary>
         /// <param name="document">The document to extend.</param>
+        /// <param name="ignoreNamespaces"></param>
         /// <returns>The navigator for XPath expressions.</returns>
-        public static XPathNavigator CreateNavigator(this IDocument document)
+        public static XPathNavigator CreateNavigator(this IDocument document, bool ignoreNamespaces = true)
         {
             var doc = document ?? throw new ArgumentNullException(nameof(document));
-            return new HtmlDocumentNavigator(doc, doc.DocumentElement);
+            return new HtmlDocumentNavigator(doc, doc.DocumentElement, ignoreNamespaces);
         }
 
         [DebuggerStepThrough]
@@ -35,14 +36,29 @@ namespace AngleSharp.XPath
         /// </summary>
         /// <param name="element">The element to start looking from.</param>
         /// <param name="xpath">The XPath expression.</param>
+        /// <param name="ignoreNamespaces"></param>
         /// <returns>The node matching <paramref name="xpath"/> query, if any.</returns>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="element"/> or <paramref name="xpath"/> is <c>null</c></exception>
-        public static INode SelectSingleNode(this IElement element, string xpath)
+        public static INode SelectSingleNode(this IElement element, string xpath, bool ignoreNamespaces = true)
+        {
+            return element.SelectSingleNode(xpath, new XmlNamespaceManager(new NameTable()), ignoreNamespaces);
+        }
+
+        /// <summary>
+        /// Selects a single node (or returns null) matching the <see cref="XPath"/> expression.
+        /// </summary>
+        /// <param name="element">The element to start looking from.</param>
+        /// <param name="xpath">The XPath expression.</param>
+        /// <param name="resolver"></param>
+        /// <param name="ignoreNamespaces"></param>
+        /// <returns>The node matching <paramref name="xpath"/> query, if any.</returns>
+        /// <exception cref="ArgumentNullException">Throws if <paramref name="element"/> or <paramref name="xpath"/> is <c>null</c></exception>
+        public static INode SelectSingleNode(this IElement element, string xpath, IXmlNamespaceResolver resolver, bool ignoreNamespaces = true)
         {
             var el = element ?? throw new ArgumentNullException(nameof(element));
             var xp = xpath ?? throw new ArgumentNullException(nameof(xpath));
-            var nav = new HtmlDocumentNavigator(el.Owner, el);
-            var it = nav.SelectSingleNode(xp);
+            var nav = new HtmlDocumentNavigator(el.Owner, el, ignoreNamespaces);
+            var it = nav.SelectSingleNode(xp, resolver ?? new XmlNamespaceManager(new NameTable()));
             return ((HtmlDocumentNavigator) it)?.CurrentNode;
         }
 
@@ -51,14 +67,29 @@ namespace AngleSharp.XPath
         /// </summary>
         /// <param name="element">The element to start looking from.</param>
         /// <param name="xpath">The XPath expression.</param>
+        /// <param name="ignoreNamespaces"></param>
         /// <returns>List of nodes matching <paramref name="xpath"/> query.</returns>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="element"/> or <paramref name="xpath"/> is <c>null</c></exception>
-        public static List<INode> SelectNodes(this IElement element, string xpath)
+        public static List<INode> SelectNodes(this IElement element, string xpath, bool ignoreNamespaces = true)
+        {
+            return element.SelectNodes(xpath, new XmlNamespaceManager(new NameTable()), ignoreNamespaces);
+        }
+
+        /// <summary>
+        /// Selects a list of nodes matching the <see cref="XPath"/> expression.
+        /// </summary>
+        /// <param name="element">The element to start looking from.</param>
+        /// <param name="xpath">The XPath expression.</param>
+        /// <param name="resolver"></param>
+        /// <param name="ignoreNamespaces"></param>
+        /// <returns>List of nodes matching <paramref name="xpath"/> query.</returns>
+        /// <exception cref="ArgumentNullException">Throws if <paramref name="element"/> or <paramref name="xpath"/> is <c>null</c></exception>
+        public static List<INode> SelectNodes(this IElement element, string xpath, IXmlNamespaceResolver resolver, bool ignoreNamespaces = true)
         {
             var el = element ?? throw new ArgumentNullException(nameof(element));
             var xp = xpath ?? throw new ArgumentNullException(nameof(xpath));
-            var nav = new HtmlDocumentNavigator(el.Owner, el);
-            var it = nav.Select(xp);
+            var nav = new HtmlDocumentNavigator(el.Owner, el, ignoreNamespaces);
+            var it = nav.Select(xp, resolver ?? new XmlNamespaceManager(new NameTable()));
             var result = new List<INode>();
 
             while (it.MoveNext())

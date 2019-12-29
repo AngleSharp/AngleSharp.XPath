@@ -11,18 +11,21 @@ namespace AngleSharp.XPath
 		private readonly IDocument _document;
         private INode _currentNode;
 		private int _attrIndex;
+        private readonly bool _ignoreNamespaces;
 
         /// <summary>
         /// Creates a new XPath navigator for the given document using the provided root node.
         /// </summary>
         /// <param name="document">The document to navigate.</param>
         /// <param name="currentNode">The node to start navigation.</param>
-        public HtmlDocumentNavigator(IDocument document, INode currentNode)
+        /// <param name="ignoreNamespaces"></param>
+        public HtmlDocumentNavigator(IDocument document, INode currentNode, bool ignoreNamespaces)
 		{
 			_document = document ?? throw new ArgumentNullException(nameof(document));
             NameTable = new NameTable();
             _currentNode = currentNode ?? throw new ArgumentNullException(nameof(currentNode));
             _attrIndex = -1;
+            _ignoreNamespaces = ignoreNamespaces;
         }
 
         /// <inheritdoc />
@@ -57,10 +60,20 @@ namespace AngleSharp.XPath
                 : NameTable.GetOrAdd(_currentNode.NodeName);
 
         /// <inheritdoc />
-        public override string NamespaceURI => string.Empty
-            /*_attrIndex != -1
-                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].NamespaceUri ?? string.Empty)
-                : NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty)*/;
+        public override string NamespaceURI
+        {
+            get
+            {
+                if (_ignoreNamespaces)
+                {
+                    return string.Empty;
+                }
+
+                return _attrIndex != -1
+                    ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].NamespaceUri ?? string.Empty)
+                    : NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty);
+            }
+        }
 
         /// <inheritdoc />
         public override string Prefix =>
@@ -169,7 +182,7 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override XPathNavigator Clone()
 		{
-			return new HtmlDocumentNavigator(_document, _currentNode);
+			return new HtmlDocumentNavigator(_document, _currentNode, _ignoreNamespaces);
 		}
 
         /// <inheritdoc />
