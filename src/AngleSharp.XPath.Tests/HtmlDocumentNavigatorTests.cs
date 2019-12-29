@@ -65,7 +65,23 @@ namespace AngleSharp.XPath.Tests
         }
 
         [Test]
-        public void SelectNodeWithNamespace_ShouldReturnNode()
+        public void SelectSingleNode_IgnoreNamespaces_ShouldReturnNode()
+        {
+            // Arrange
+            var xml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"><url><loc>https://www.test.com/de/accounts/profile</loc><xhtml:link rel=\"alternate\" hreflang=\"fr\" href=\"https://www.test.com/fr/accounts/profile\" /><xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"https://www.test.com/en/accounts/profile\" /><xhtml:link rel=\"alternate\" hreflang=\"it\" href=\"https://www.test.com/it/accounts/profile\" /><changefreq>weekly</changefreq><priority>0.4</priority></url></urlset>";
+            var parser = new XmlParser();
+            var doc = parser.ParseDocument(xml);
+
+            // Act
+            var node = doc.DocumentElement.SelectSingleNode("/urlset/url/link");
+
+            // Assert
+            Assert.IsNotNull(node);
+            Assert.That(node.NodeName, Is.EqualTo("xhtml:link"));
+        }
+
+        [Test]
+        public void SelectSingleNode_DontIgnoreNamespaces_ShouldReturnNode()
         {
             // Arrange
             var xml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"><url><loc>https://www.test.com/de/accounts/profile</loc><xhtml:link rel=\"alternate\" hreflang=\"fr\" href=\"https://www.test.com/fr/accounts/profile\" /><xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"https://www.test.com/en/accounts/profile\" /><xhtml:link rel=\"alternate\" hreflang=\"it\" href=\"https://www.test.com/it/accounts/profile\" /><changefreq>weekly</changefreq><priority>0.4</priority></url></urlset>";
@@ -77,7 +93,7 @@ namespace AngleSharp.XPath.Tests
             namespaceManager.AddNamespace("d", "http://www.sitemaps.org/schemas/sitemap/0.9");
 
             // Act
-            var node = doc.DocumentElement.SelectSingleNode("/urlset/url/link");
+            var node = doc.DocumentElement.SelectSingleNode("/d:urlset/d:url/xhtml:link", namespaceManager, false);
 
             // Assert
             Assert.IsNotNull(node);
