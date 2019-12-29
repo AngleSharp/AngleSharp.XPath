@@ -1,33 +1,32 @@
+using AngleSharp.Dom;
+using System;
+using System.Xml;
+using System.Xml.XPath;
+
 namespace AngleSharp.XPath
 {
-    using AngleSharp.Dom;
-    using System;
-    using System.Xml;
-    using System.Xml.XPath;
-
     /// <inheritdoc />
     public class HtmlDocumentNavigator : XPathNavigator
 	{
 		private readonly IDocument _document;
-        private readonly NameTable _nameTable;
         private INode _currentNode;
-		private Int32 _attrIndex;
+		private int _attrIndex;
 
         /// <summary>
         /// Creates a new XPath navigator for the given document using the provided root node.
         /// </summary>
         /// <param name="document">The document to navigate.</param>
         /// <param name="currentNode">The node to start navigation.</param>
-		public HtmlDocumentNavigator(IDocument document, INode currentNode)
+        public HtmlDocumentNavigator(IDocument document, INode currentNode)
 		{
 			_document = document ?? throw new ArgumentNullException(nameof(document));
-            _nameTable = new NameTable();
+            NameTable = new NameTable();
             _currentNode = currentNode ?? throw new ArgumentNullException(nameof(currentNode));
-			_attrIndex = -1;
-		}
+            _attrIndex = -1;
+        }
 
         /// <inheritdoc />
-        public override String BaseURI => _document.BaseUri;
+        public override string BaseURI => _document.BaseUri;
 
         /// <summary>
         /// Gets the currently selected node.
@@ -40,38 +39,37 @@ namespace AngleSharp.XPath
 		private IElement CurrentElement => CurrentNode as IElement;
 
         /// <inheritdoc />
-        public override Boolean HasAttributes => CurrentElement != null && CurrentElement.Attributes.Length > 0;
+        public override bool HasAttributes => CurrentElement != null && CurrentElement.Attributes.Length > 0;
 
         /// <inheritdoc />
-        public override Boolean IsEmptyElement => !_currentNode.HasChildNodes;
+        public override bool IsEmptyElement => !_currentNode.HasChildNodes;
 
         /// <inheritdoc />
-        public override String LocalName
-		{
-			get
-			{
-				if (_attrIndex != -1)
-				{
-					return NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Name);
-				}
-
-				if (CurrentNode is IElement)
-				{
-					return NameTable.GetOrAdd(CurrentElement.LocalName);
-				}
-
-				return NameTable.GetOrAdd(CurrentNode.NodeName);
-			}
-		}
+        public override string LocalName =>
+            _attrIndex != -1
+                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].LocalName)
+                : NameTable.GetOrAdd(CurrentNode is IElement e ? e.LocalName : string.Empty);
 
         /// <inheritdoc />
-        public override String Name => NameTable.GetOrAdd(_currentNode.NodeName);
+        public override string Name =>
+            _attrIndex != -1
+                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Name)
+                : NameTable.GetOrAdd(_currentNode.NodeName);
 
         /// <inheritdoc />
-        public override String NamespaceURI => String.Empty;// NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty);
+        public override string NamespaceURI => string.Empty
+            /*_attrIndex != -1
+                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].NamespaceUri ?? string.Empty)
+                : NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty)*/;
 
         /// <inheritdoc />
-        public override XmlNameTable NameTable => _nameTable;
+        public override string Prefix =>
+            _attrIndex != 1
+                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Prefix ?? string.Empty)
+                : NameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
+
+        /// <inheritdoc />
+        public override XmlNameTable NameTable { get; }
 
         /// <inheritdoc />
         public override XPathNodeType NodeType
@@ -94,14 +92,9 @@ namespace AngleSharp.XPath
 
 					case Dom.NodeType.DocumentType:
 						return XPathNodeType.Element;
-                        
-                    case Dom.NodeType.Element:
-						if (_attrIndex != -1)
-						{
-							return XPathNodeType.Attribute;
-						}
 
-						return XPathNodeType.Element;
+                    case Dom.NodeType.Element:
+						return _attrIndex != -1 ? XPathNodeType.Attribute : XPathNodeType.Element;
 
                     case Dom.NodeType.ProcessingInstruction:
 						return XPathNodeType.ProcessingInstruction;
@@ -120,10 +113,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override String Prefix => String.Empty;// _nameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
-
-        /// <inheritdoc />
-        public override String Value
+        public override string Value
 		{
 			get
 			{
@@ -152,14 +142,9 @@ namespace AngleSharp.XPath
 						return documentType.Name;
 
 					case Dom.NodeType.Element:
-						if (_attrIndex != -1)
-						{
-							return CurrentElement.Attributes[_attrIndex].Value;
-						}
+						return _attrIndex != -1 ? CurrentElement.Attributes[_attrIndex].Value : _currentNode.TextContent;
 
-						return _currentNode.TextContent;
-
-					case Dom.NodeType.Entity:
+                    case Dom.NodeType.Entity:
 						return _currentNode.TextContent;
 
 					case Dom.NodeType.EntityReference:
@@ -188,7 +173,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean IsSamePosition(XPathNavigator other)
+        public override bool IsSamePosition(XPathNavigator other)
 		{
 			if (!(other is HtmlDocumentNavigator navigator))
 			{
@@ -199,7 +184,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveTo(XPathNavigator other)
+        public override bool MoveTo(XPathNavigator other)
 		{
 			if (!(other is HtmlDocumentNavigator navigator))
 			{
@@ -217,7 +202,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToFirstAttribute()
+        public override bool MoveToFirstAttribute()
 		{
 			if (HasAttributes)
 			{
@@ -229,7 +214,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToFirstChild()
+        public override bool MoveToFirstChild()
 		{
 			if (_currentNode.FirstChild == null)
 			{
@@ -241,13 +226,13 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToFirstNamespace(XPathNamespaceScope namespaceScope)
+        public override bool MoveToFirstNamespace(XPathNamespaceScope namespaceScope)
 		{
 			return false;
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToId(String id)
+        public override bool MoveToId(string id)
 		{
 			var elementById = _document.GetElementById(id);
 
@@ -261,7 +246,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToNext()
+        public override bool MoveToNext()
 		{
 			if (_currentNode.NextSibling == null)
 			{
@@ -273,7 +258,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToNextAttribute()
+        public override bool MoveToNextAttribute()
 		{
 			if (CurrentElement == null)
 			{
@@ -290,13 +275,13 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToNextNamespace(XPathNamespaceScope namespaceScope)
+        public override bool MoveToNextNamespace(XPathNamespaceScope namespaceScope)
 		{
 			return false;
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToParent()
+        public override bool MoveToParent()
 		{
 			if (_currentNode.Parent == null)
 			{
@@ -308,7 +293,7 @@ namespace AngleSharp.XPath
 		}
 
         /// <inheritdoc />
-        public override Boolean MoveToPrevious()
+        public override bool MoveToPrevious()
 		{
 			if (_currentNode.PreviousSibling == null)
 			{
@@ -322,7 +307,7 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override void MoveToRoot()
 		{
-			_currentNode = _document.DocumentElement;
+			_currentNode = _document;
 		}
-	}
+    }
 }

@@ -1,9 +1,9 @@
+using AngleSharp.Dom;
+using System;
+using System.Xml.XPath;
+
 namespace AngleSharp.XPath
 {
-    using AngleSharp.Dom;
-    using System;
-    using System.Xml.XPath;
-
     /// <inheritdoc />
     public class HtmlDocumentNavigable : IXPathNavigable
     {
