@@ -34,7 +34,10 @@ namespace AngleSharp.XPath
         /// <summary>
         /// Gets the currently selected node.
         /// </summary>
-		public INode CurrentNode => _currentNode;
+		public INode CurrentNode =>
+            _attrIndex != -1
+                ? new AttrNodeWrapper(((IElement)_currentNode).Attributes[_attrIndex], (IElement)_currentNode)
+                : _currentNode;
 
         /// <summary>
         /// Gets the currently selected element.
@@ -50,13 +53,13 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override string LocalName =>
             _attrIndex != -1
-                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].LocalName)
+                ? NameTable.GetOrAdd(((IAttr)CurrentNode).LocalName)
                 : NameTable.GetOrAdd(CurrentNode is IElement e ? e.LocalName : string.Empty);
 
         /// <inheritdoc />
         public override string Name =>
             _attrIndex != -1
-                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Name)
+                ? NameTable.GetOrAdd(((IAttr)CurrentNode).Name)
                 : NameTable.GetOrAdd(_currentNode.NodeName);
 
         /// <inheritdoc />
@@ -70,7 +73,7 @@ namespace AngleSharp.XPath
                 }
 
                 return _attrIndex != -1
-                    ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].NamespaceUri ?? string.Empty)
+                    ? NameTable.GetOrAdd(((IAttr)CurrentNode).NamespaceUri ?? string.Empty)
                     : NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty);
             }
         }
@@ -78,7 +81,7 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override string Prefix =>
             _attrIndex != 1
-                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Prefix ?? string.Empty)
+                ? NameTable.GetOrAdd(((IAttr)CurrentNode).Prefix ?? string.Empty)
                 : NameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
 
         /// <inheritdoc />
@@ -155,7 +158,7 @@ namespace AngleSharp.XPath
 						return documentType.Name;
 
 					case Dom.NodeType.Element:
-						return _attrIndex != -1 ? CurrentElement.Attributes[_attrIndex].Value : _currentNode.TextContent;
+						return _attrIndex != -1 ? ((IAttr)CurrentNode).Value : _currentNode.TextContent;
 
                     case Dom.NodeType.Entity:
 						return _currentNode.TextContent;

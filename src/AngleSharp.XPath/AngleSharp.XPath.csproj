@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.1.6</Version>
+    <Version>1.1.7</Version>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
-    <AssemblyVersion>1.1.6</AssemblyVersion>
+    <AssemblyVersion>1.1.7</AssemblyVersion>
     <AssemblyName>AngleSharp.XPath</AssemblyName>
     <RootNamespace>AngleSharp.XPath</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <FileVersion>1.1.6</FileVersion>
+    <FileVersion>1.1.7</FileVersion>
     <Description>XPath support for AngleSharp</Description>
     <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.13.0" />
+    <PackageReference Include="AngleSharp" Version="0.14.0" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

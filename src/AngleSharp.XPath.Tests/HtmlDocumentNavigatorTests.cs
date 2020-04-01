@@ -99,5 +99,22 @@ namespace AngleSharp.XPath.Tests
             Assert.IsNotNull(node);
             Assert.That(node.NodeName, Is.EqualTo("xhtml:link"));
         }
+
+        [Test]
+        public void SelectNodes_CanReturnAttribute()
+        {
+            // Arrange
+            var html = "<!DOCTYPE html><html><body><div class=\"one\"><span class=\"two\">hello world</span></div></body></html>";
+            var parser = new HtmlParser();
+            var doc = parser.ParseDocument(html);
+
+            // Act
+            var nodes = doc.DocumentElement.SelectNodes("//@*");
+
+            // Assert
+            Assert.IsNotNull(nodes);
+            Assert.That(nodes, Has.Count.EqualTo(2));
+            Assert.That(nodes, Is.All.InstanceOf<Dom.IAttr>());
+        }
     }
 }
