@@ -6,6 +6,7 @@ AngleSharp.XPath contains code written by (in order of first pull request / comm
 
 * [Denis Ivanov](https://github.com/denis-ivanov)
 * [Florian Rappl](https://github.com/FlorianRappl)
+* [Richard Robertson](https://github.com/RichardRobertson)
 
 Without these awesome people AngleSharp.XPath could not exist. Thanks to everyone for your contributions! :beers:
 
