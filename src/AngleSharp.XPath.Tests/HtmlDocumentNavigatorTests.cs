@@ -99,5 +99,22 @@ namespace AngleSharp.XPath.Tests
             Assert.IsNotNull(node);
             Assert.That(node.NodeName, Is.EqualTo("xhtml:link"));
         }
+
+        [Test]
+        public void PrefixAccessShouldWork()
+        {
+            var xml = @"<root>test</root>";
+
+            var parser = new XmlParser();
+
+            var doc = parser.ParseDocument(xml);
+
+            var nav = doc.CreateNavigator(false);
+
+            if (nav.MoveToFirstChild())
+            {
+                Assert.IsNotNull(nav.Prefix);
+            }
+        }
     }
 }

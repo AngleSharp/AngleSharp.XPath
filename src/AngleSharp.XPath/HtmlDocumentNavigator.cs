@@ -77,7 +77,7 @@ namespace AngleSharp.XPath
 
         /// <inheritdoc />
         public override string Prefix =>
-            _attrIndex != 1
+            _attrIndex != -1
                 ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Prefix ?? string.Empty)
                 : NameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
 
