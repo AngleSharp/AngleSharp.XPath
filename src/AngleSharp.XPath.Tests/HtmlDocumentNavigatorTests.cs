@@ -3,6 +3,7 @@ using AngleSharp.Xml.Parser;
 using AngleSharp.Html.Parser;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using AngleSharp.Dom;
 
 namespace AngleSharp.XPath.Tests
@@ -145,6 +146,32 @@ namespace AngleSharp.XPath.Tests
 
             // Assert
             Assert.AreEqual(TagNames.Html, htmlNav.Evaluate("name()"));
+        }
+
+        [Test]
+        public void MoveToParent_CallWhenCurrentNodeIsAttr_ShouldBeMovedToAttrOwnerElement()
+        {
+            // Arrange
+            var xml = @"<root att1='value 1' att2='value 2'><child>foo</child></root>";
+            var parser = new XmlParser();
+            var doc = parser.ParseDocument(xml);
+            var nav = doc.CreateNavigator(false);
+            nav.MoveToChild("root", "");
+
+            // Act
+
+            if (nav.MoveToFirstAttribute())
+            {
+                do
+                {
+                    Assert.AreEqual(nav.NodeType, XPathNodeType.Attribute);
+                }
+                while (nav.MoveToNextAttribute());
+                nav.MoveToParent();
+            }
+
+            // Assert
+            Assert.AreEqual(nav.Name, "root");
         }
     }
 }

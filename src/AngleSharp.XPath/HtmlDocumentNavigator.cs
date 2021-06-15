@@ -293,11 +293,16 @@ namespace AngleSharp.XPath
                 return false;
             }
 
+            if (attr.OwnerElement == null)
+            {
+                return false;
+            }
+
             var attrIndex = attr.OwnerElement.Attributes.Index(attr);
 
 			if (attrIndex >= CurrentElement.Attributes.Length - 1)
 			{
-				return false;
+                return false;
 			}
 
             _currentNode = attr.OwnerElement.Attributes[attrIndex + 1];
@@ -313,6 +318,12 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override bool MoveToParent()
 		{
+            if (CurrentNode is IAttr attr)
+            {
+                _currentNode = attr.OwnerElement;
+                return true;
+            }
+
 			if (_currentNode.Parent == null)
 			{
 				return false;
