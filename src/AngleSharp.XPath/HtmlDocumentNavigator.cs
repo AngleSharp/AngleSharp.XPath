@@ -52,10 +52,23 @@ namespace AngleSharp.XPath
                 : NameTable.GetOrAdd(CurrentNode is IElement e ? e.LocalName : string.Empty);
 
         /// <inheritdoc />
-        public override string Name =>
-            CurrentNode is IAttr attr
-                ? NameTable.GetOrAdd(attr.Name)
-                : NameTable.GetOrAdd(_currentNode.NodeName);
+        public override string Name
+        {
+            get
+            {
+                if (CurrentNode is IAttr attr)
+                {
+                    return NameTable.GetOrAdd(attr.Name);
+                }
+
+                if (CurrentElement != null)
+                {
+                    return NameTable.GetOrAdd(CurrentElement.LocalName);
+                }
+
+                return NameTable.GetOrAdd(_currentNode.NodeName);
+            }
+        }
 
         /// <inheritdoc />
         public override string NamespaceURI
