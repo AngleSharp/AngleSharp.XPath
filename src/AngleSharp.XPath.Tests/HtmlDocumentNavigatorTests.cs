@@ -4,6 +4,8 @@ using AngleSharp.Html.Parser;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
+using System.Xml.XPath;
+using System.Xml.Linq;
 
 namespace AngleSharp.XPath.Tests
 {
@@ -145,6 +147,72 @@ namespace AngleSharp.XPath.Tests
 
             // Assert
             Assert.AreEqual(TagNames.Html, htmlNav.Evaluate("name()"));
+        }
+
+        [Test]
+        public void TestAttributeNavigation()
+        {
+            var xml = @"<root att1='value 1' att2='value 2'><child>foo</child></root>";
+
+            var parser = new XmlParser();
+
+            var doc = parser.ParseDocument(xml);
+
+            var nav = doc.CreateNavigator(false);
+
+            Assert.AreEqual(nav.Name, "root");
+            if (nav.MoveToFirstAttribute())
+            {
+                do
+                {
+                    Assert.AreEqual(nav.NodeType, XPathNodeType.Attribute);
+                }
+                while (nav.MoveToNextAttribute());
+                nav.MoveToParent();
+            }
+            Assert.AreEqual(nav.Name, "root");
+
+        }
+
+        [Test]
+        public void TestReadSubTree()
+        {
+            var xml = @"<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'/><title>Test</title></head><body><h1>Test</h1><p id='p-1'>This is paragraph 1 line 1.<br/>Line 2.</p><p>This is paragraph 2 line 1.<br/>Line 2.</p></body></html>";
+
+            var xmlDoc = new XmlParser().ParseDocument(xml);
+
+            var angleSharpNav = xmlDoc.CreateNavigator(false);
+
+            var xDoc = XDocument.Parse(xml);
+
+            var xNav = xDoc.Root.CreateNavigator();
+
+            using (var angleSharpReader = angleSharpNav.ReadSubtree())
+            {
+                using (var xReader = xNav.ReadSubtree())
+                {
+                    while (angleSharpReader.Read() && xReader.Read())
+                    {
+                        Assert.AreEqual(angleSharpReader.NodeType, xReader.NodeType);
+                        Assert.AreEqual(angleSharpReader.LocalName, xReader.LocalName);
+                        Assert.AreEqual(angleSharpReader.NamespaceURI, xReader.NamespaceURI);
+                        Assert.AreEqual(angleSharpReader.HasAttributes, xReader.HasAttributes);
+
+                        if (angleSharpReader.NodeType == XmlNodeType.Element && angleSharpReader.HasAttributes && xReader.HasAttributes)
+                        {
+                            while (angleSharpReader.MoveToNextAttribute() && xReader.MoveToNextAttribute())
+                            {
+                                Assert.AreEqual(angleSharpReader.NodeType, xReader.NodeType);
+                                Assert.AreEqual(angleSharpReader.LocalName, xReader.LocalName);
+                                Assert.AreEqual(angleSharpReader.NamespaceURI, xReader.NamespaceURI);
+                            }
+
+                            angleSharpReader.MoveToElement();
+                            xReader.MoveToElement();
+                        }
+                    }
+                }
+            }
         }
     }
 }

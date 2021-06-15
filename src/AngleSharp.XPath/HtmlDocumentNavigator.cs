@@ -312,15 +312,22 @@ namespace AngleSharp.XPath
 
         /// <inheritdoc />
         public override bool MoveToParent()
-		{
-			if (_currentNode.Parent == null)
-			{
-				return false;
-			}
+        {
+            if (_currentNode is IAttr attr)
+            {
+                _currentNode = attr.OwnerElement;
+                return true;
+            }
 
-			_currentNode = _currentNode.Parent;
-			return true;
-		}
+            if (_currentNode.Parent == null)
+            {
+                return false;
+            }
+
+            _currentNode = _currentNode.Parent;
+            return true;
+        }
+
 
         /// <inheritdoc />
         public override bool MoveToPrevious()
