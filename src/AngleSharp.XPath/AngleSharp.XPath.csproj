@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.0.0-alpha-1</Version>
+    <Version>2.0.0-alpha-2</Version>
     <AssemblyVersion>2.0.0</AssemblyVersion>
-    <FileVersion>2.0.0-alpha-1</FileVersion>
+    <FileVersion>2.0.0-alpha-2</FileVersion>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
     <AssemblyName>AngleSharp.XPath</AssemblyName>
     <RootNamespace>AngleSharp.XPath</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net46;net461;net472</TargetFrameworks>
     <Description>XPath support for AngleSharp</Description>
     <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

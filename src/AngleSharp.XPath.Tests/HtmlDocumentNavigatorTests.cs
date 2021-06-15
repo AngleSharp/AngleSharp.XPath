@@ -3,6 +3,7 @@ using AngleSharp.Xml.Parser;
 using AngleSharp.Html.Parser;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 
 namespace AngleSharp.XPath.Tests
 {
@@ -115,6 +116,35 @@ namespace AngleSharp.XPath.Tests
             Assert.IsNotNull(nodes);
             Assert.That(nodes, Has.Count.EqualTo(2));
             Assert.That(nodes, Is.All.InstanceOf<Dom.IAttr>());
+        }
+
+        [Test]
+        public void TestNameXPathFunctionOnXMLDoc()
+        {
+            // Arrange
+            var xml = @"<html><head><title>Test</title></head><body><h1>Test</h1></body></html>";
+            var angleSharpXmlDoc = new XmlParser().ParseDocument(xml);
+
+            // Act
+            var xmlNav = angleSharpXmlDoc.CreateNavigator();
+
+            // Assert
+            Assert.AreEqual(TagNames.Html, xmlNav.Evaluate("name()"));
+        }
+
+        [Test]
+        public void TestNameXPathFunctionOnHTMLDoc()
+        {
+            // Arrange
+            var html = @"<html><head><title>Test</title></head><body><h1>Test</h1></body></html>";
+
+            var angleSharpHtmlDoc = new HtmlParser().ParseDocument(html);
+
+            // Act
+            var htmlNav = angleSharpHtmlDoc.CreateNavigator();
+
+            // Assert
+            Assert.AreEqual(TagNames.Html, htmlNav.Evaluate("name()"));
         }
     }
 }
