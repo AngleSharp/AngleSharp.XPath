@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.0.0-alpha-3</Version>
+    <Version>2.0.0</Version>
     <AssemblyVersion>2.0.0</AssemblyVersion>
-    <FileVersion>2.0.0-alpha-3</FileVersion>
+    <FileVersion>2.0.0</FileVersion>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
     <AssemblyName>AngleSharp.XPath</AssemblyName>
     <RootNamespace>AngleSharp.XPath</RootNamespace>
-    <TargetFrameworks>netstandard2.0;net46;net461;net472</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;net472;net6.0</TargetFrameworks>
     <Description>XPath support for AngleSharp</Description>
     <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -20,7 +20,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.16.1-alpha-96" />
+    <PackageReference Include="AngleSharp" Version="0.17.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
