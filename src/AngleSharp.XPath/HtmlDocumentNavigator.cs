@@ -10,7 +10,6 @@ namespace AngleSharp.XPath
 	{
 		private readonly IDocument _document;
         private INode _currentNode;
-		private int _attrIndex;
         private readonly bool _ignoreNamespaces;
 
         /// <summary>
@@ -24,7 +23,6 @@ namespace AngleSharp.XPath
 			_document = document ?? throw new ArgumentNullException(nameof(document));
             NameTable = new NameTable();
             _currentNode = currentNode ?? throw new ArgumentNullException(nameof(currentNode));
-            _attrIndex = -1;
             _ignoreNamespaces = ignoreNamespaces;
         }
 
@@ -49,15 +47,28 @@ namespace AngleSharp.XPath
 
         /// <inheritdoc />
         public override string LocalName =>
-            _attrIndex != -1
-                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].LocalName)
+            CurrentNode is IAttr attr
+                ? attr.LocalName
                 : NameTable.GetOrAdd(CurrentNode is IElement e ? e.LocalName : string.Empty);
 
         /// <inheritdoc />
-        public override string Name =>
-            _attrIndex != -1
-                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Name)
-                : NameTable.GetOrAdd(_currentNode.NodeName);
+        public override string Name
+        {
+            get
+            {
+                if (CurrentNode is IAttr attr)
+                {
+                    return NameTable.GetOrAdd(attr.Name);
+                }
+
+                if (CurrentElement != null)
+                {
+                    return NameTable.GetOrAdd(CurrentElement.LocalName);
+                }
+
+                return NameTable.GetOrAdd(_currentNode.NodeName);
+            }
+        }
 
         /// <inheritdoc />
         public override string NamespaceURI
@@ -69,16 +80,16 @@ namespace AngleSharp.XPath
                     return string.Empty;
                 }
 
-                return _attrIndex != -1
-                    ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].NamespaceUri ?? string.Empty)
+                return CurrentNode is IAttr attr
+                    ? NameTable.GetOrAdd(attr.NamespaceUri ?? string.Empty)
                     : NameTable.GetOrAdd(CurrentElement?.NamespaceUri ?? string.Empty);
             }
         }
 
         /// <inheritdoc />
         public override string Prefix =>
-            _attrIndex != 1
-                ? NameTable.GetOrAdd(CurrentElement.Attributes[_attrIndex].Prefix ?? string.Empty)
+            CurrentNode is IAttr attr
+                ? NameTable.GetOrAdd(attr.Prefix ?? string.Empty)
                 : NameTable.GetOrAdd(CurrentElement?.Prefix ?? string.Empty);
 
         /// <inheritdoc />
@@ -107,7 +118,7 @@ namespace AngleSharp.XPath
 						return XPathNodeType.Element;
 
                     case Dom.NodeType.Element:
-						return _attrIndex != -1 ? XPathNodeType.Attribute : XPathNodeType.Element;
+						return XPathNodeType.Element;
 
                     case Dom.NodeType.ProcessingInstruction:
 						return XPathNodeType.ProcessingInstruction;
@@ -155,7 +166,7 @@ namespace AngleSharp.XPath
 						return documentType.Name;
 
 					case Dom.NodeType.Element:
-						return _attrIndex != -1 ? CurrentElement.Attributes[_attrIndex].Value : _currentNode.TextContent;
+						return _currentNode.TextContent;
 
                     case Dom.NodeType.Entity:
 						return _currentNode.TextContent;
@@ -207,7 +218,6 @@ namespace AngleSharp.XPath
 			if (navigator._document == _document)
 			{
 				_currentNode = navigator._currentNode;
-				_attrIndex = navigator._attrIndex;
 				return true;
 			}
 
@@ -218,8 +228,8 @@ namespace AngleSharp.XPath
         public override bool MoveToFirstAttribute()
 		{
 			if (HasAttributes)
-			{
-				_attrIndex = 0;
+            {
+                _currentNode = CurrentElement.Attributes[0];
 				return true;
 			}
 
@@ -278,12 +288,24 @@ namespace AngleSharp.XPath
 				return false;
 			}
 
-			if (_attrIndex >= CurrentElement.Attributes.Length - 1)
+            if (!(CurrentNode is IAttr attr))
+            {
+                return false;
+            }
+
+            if (attr.OwnerElement == null)
+            {
+                return false;
+            }
+
+            var attrIndex = attr.OwnerElement.Attributes.Index(attr);
+
+			if (attrIndex >= CurrentElement.Attributes.Length - 1)
 			{
-				return false;
+                return false;
 			}
 
-			_attrIndex++;
+            _currentNode = attr.OwnerElement.Attributes[attrIndex + 1];
 			return true;
 		}
 
@@ -296,6 +318,12 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override bool MoveToParent()
 		{
+            if (CurrentNode is IAttr attr)
+            {
+                _currentNode = attr.OwnerElement;
+                return true;
+            }
+
 			if (_currentNode.Parent == null)
 			{
 				return false;

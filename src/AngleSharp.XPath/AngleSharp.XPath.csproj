@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.1.7</Version>
+    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <FileVersion>2.0.0</FileVersion>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
-    <AssemblyVersion>1.1.7</AssemblyVersion>
     <AssemblyName>AngleSharp.XPath</AssemblyName>
     <RootNamespace>AngleSharp.XPath</RootNamespace>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <FileVersion>1.1.7</FileVersion>
+    <TargetFrameworks>netstandard2.0;net461;net472;net6.0</TargetFrameworks>
     <Description>XPath support for AngleSharp</Description>
     <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -16,10 +16,15 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublicSign>True</PublicSign>
+    <PackageIconUrl>https://raw.githubusercontent.com/AngleSharp/AngleSharp.XPath/master/logo.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.14.0" />
+    <PackageReference Include="AngleSharp" Version="0.17.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
