@@ -1,10 +1,10 @@
-using System.Xml;
-using AngleSharp.Xml.Parser;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using AngleSharp.Xml.Parser;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.XPath;
-using AngleSharp.Dom;
 
 namespace AngleSharp.XPath.Tests
 {
@@ -172,6 +172,30 @@ namespace AngleSharp.XPath.Tests
 
             // Assert
             Assert.AreEqual(nav.Name, "root");
+        }
+
+        [Test]
+        public void SelectSingleNodeTest_AttributesOrder()
+        {
+            // Arrange
+            const string html =
+                @"<body>
+			<div id='div1'>First</div>
+			<div id='div2' class='mydiv'>Second</div>
+			<div class='mydiv' id='div3'>Third</div>
+		</body>";
+            var parser = new HtmlParser();
+            var document = parser.ParseDocument(html);
+
+            // Act
+            var div1 = document.DocumentElement.SelectSingleNode("//div[@id='div1']");
+            var div2 = document.DocumentElement.SelectSingleNode("//div[@id='div2']");
+            var div3 = document.DocumentElement.SelectSingleNode("//div[@id='div3']");
+
+            // Assert
+            Assert.That(div1, Is.Not.Null);
+            Assert.That(div2, Is.Not.Null);
+            Assert.That(div3, Is.Not.Null); // currently fails
         }
     }
 }
