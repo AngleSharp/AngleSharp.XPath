@@ -283,11 +283,6 @@ namespace AngleSharp.XPath
         /// <inheritdoc />
         public override bool MoveToNextAttribute()
 		{
-			if (CurrentElement == null)
-			{
-				return false;
-			}
-
             if (!(CurrentNode is IAttr attr))
             {
                 return false;
@@ -300,10 +295,10 @@ namespace AngleSharp.XPath
 
             var attrIndex = attr.OwnerElement.Attributes.Index(attr);
 
-			if (attrIndex >= CurrentElement.Attributes.Length - 1)
-			{
+            if (attrIndex == attr.OwnerElement.Attributes.Length - 1)
+            {
                 return false;
-			}
+            }
 
             _currentNode = attr.OwnerElement.Attributes[attrIndex + 1];
 			return true;
