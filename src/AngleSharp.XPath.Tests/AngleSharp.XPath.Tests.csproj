@@ -8,6 +8,11 @@
   <ItemGroup>
     <ProjectReference Include="..\AngleSharp.XPath\AngleSharp.XPath.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="40.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>

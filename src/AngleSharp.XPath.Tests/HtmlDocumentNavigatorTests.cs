@@ -1,7 +1,10 @@
 using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using AngleSharp.Xml.Parser;
 using NUnit.Framework;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
@@ -196,6 +199,19 @@ namespace AngleSharp.XPath.Tests
             Assert.That(div1, Is.Not.Null);
             Assert.That(div2, Is.Not.Null);
             Assert.That(div3, Is.Not.Null); // currently fails
+        }
+
+        [Test]
+        public void Issue40()
+        {
+            var html = File.ReadAllText("40.html");
+            var parser = new HtmlParser();
+            var document = parser.ParseDocument(html);
+            var node = document.Body.SelectSingleNode("(//table[@class='accountTable'])[2]//a/@data-miniprofile");
+            var table = (((IAttr)node).OwnerElement).Ancestors<IHtmlTableElement>().Single();
+
+            StringAssert.DoesNotContain("DEVICE NAME", table.Text());
+            StringAssert.Contains("User Name", table.Text());
         }
     }
 }
