@@ -207,11 +207,10 @@ namespace AngleSharp.XPath.Tests
             var html = File.ReadAllText("40.html");
             var parser = new HtmlParser();
             var document = parser.ParseDocument(html);
-            var node = document.Body.SelectSingleNode("(//table[@class='accountTable'])[2]//a/@data-miniprofile");
-            var table = (((IAttr)node).OwnerElement).Ancestors<IHtmlTableElement>().Single();
+            var nodes = document.Body.SelectNodes("(//table[@class='accountTable'])[2]//a/@data-miniprofile");
 
-            StringAssert.DoesNotContain("DEVICE NAME", table.Text());
-            StringAssert.Contains("User Name", table.Text());
+            Assert.AreEqual(1, nodes.Count);
+            Assert.IsTrue(nodes.All(node => node is not IAttr));
         }
     }
 }
