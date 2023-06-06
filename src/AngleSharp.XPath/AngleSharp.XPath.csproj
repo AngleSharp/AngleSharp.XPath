@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.0.2</Version>
-    <AssemblyVersion>2.0.2</AssemblyVersion>
-    <FileVersion>2.0.2</FileVersion>
+    <Version>2.0.3</Version>
+    <AssemblyVersion>2.0.3</AssemblyVersion>
+    <FileVersion>2.0.3</FileVersion>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
     <AssemblyName>AngleSharp.XPath</AssemblyName>
@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.0.1" />
+    <PackageReference Include="AngleSharp" Version="1.0.2" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
