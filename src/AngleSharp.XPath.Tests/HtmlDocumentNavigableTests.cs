@@ -1,36 +1,36 @@
-namespace AngleSharp.XPath.Tests
+using AngleSharp.Html.Parser;
+using FluentAssertions;
+using NUnit.Framework;
+using System;
+
+namespace AngleSharp.XPath.Tests;
+
+[TestFixture]
+internal sealed class HtmlDocumentNavigableTests
 {
-    using AngleSharp.Html.Parser;
-    using NUnit.Framework;
-    using System;
-
-    [TestFixture]
-    public class HtmlDocumentNavigableTests
+    [Test]
+    public void Ctor_NullDocumentArgument_DoesThrowException()
     {
-        [Test]
-        public void Ctor_NullDocumentArgument_DoesThrowException()
-        {
-            // Arrange
-            
-            // Act
-            
-            // Assert
-            Assert.Throws<ArgumentNullException>(() => new HtmlDocumentNavigable(null));
-        }
+        // Arrange
 
-        [Test]
-        public void CreateNavigator_Call_ShouldReturnHtmlDocumentNavigator()
-        {
-            // Arrange
-            var parser = new HtmlParser();
-            var document = parser.ParseDocument("<html></html>");
-            var navigable = new HtmlDocumentNavigable(document);
+        // Act
 
-            // Act
-            var navigator = navigable.CreateNavigator();
+        // Assert
+        Assert.Throws<ArgumentNullException>(() => new HtmlDocumentNavigable(null));
+    }
 
-            // Assert
-            Assert.That(navigator, Is.TypeOf<HtmlDocumentNavigator>());
-        }
+    [Test]
+    public void CreateNavigator_Call_ShouldReturnHtmlDocumentNavigator()
+    {
+        // Arrange
+        var parser = new HtmlParser();
+        var document = parser.ParseDocument("<html></html>");
+        var navigable = new HtmlDocumentNavigable(document);
+
+        // Act
+        var navigator = navigable.CreateNavigator();
+
+        // Assert
+        navigator.Should().BeOfType<HtmlDocumentNavigator>();
     }
 }

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.0.3</Version>
-    <AssemblyVersion>2.0.3</AssemblyVersion>
-    <FileVersion>2.0.3</FileVersion>
+    <Version>2.0.4</Version>
+    <AssemblyVersion>2.0.4</AssemblyVersion>
+    <FileVersion>2.0.4</FileVersion>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
     <AssemblyName>AngleSharp.XPath</AssemblyName>
     <RootNamespace>AngleSharp.XPath</RootNamespace>
-    <TargetFrameworks>netstandard2.0;net461;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;net6.0;net7.0;net8.0</TargetFrameworks>
     <Description>XPath support for AngleSharp</Description>
     <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -16,11 +16,18 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublicSign>True</PublicSign>
-    <PackageIconUrl>https://raw.githubusercontent.com/AngleSharp/AngleSharp.XPath/master/logo.png</PackageIconUrl>
+    <PackageIconUrl>logo.png</PackageIconUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.0.2" />
+    <PackageReference Include="AngleSharp" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
