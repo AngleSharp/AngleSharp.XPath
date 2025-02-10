@@ -1,11 +1,11 @@
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using AngleSharp.Xml.Parser;
-using FluentAssertions;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
+using Shouldly;
 
 namespace AngleSharp.XPath.Tests;
 
@@ -24,7 +24,7 @@ internal sealed class HtmlDocumentNavigatorTests
         var content = document.DocumentElement.SelectSingleNode("//div[@id='content']");
 
         // Assert
-        content.Should().NotBeNull();
+        content.ShouldNotBeNull();
     }
 
     [Test]
@@ -44,7 +44,7 @@ internal sealed class HtmlDocumentNavigatorTests
         var nodes = document.DocumentElement.SelectNodes("//li");
 
         // Assert
-        nodes.Should().HaveCount(3);
+        nodes.Count.ShouldBe(3);
     }
 
     [Test]
@@ -64,7 +64,7 @@ internal sealed class HtmlDocumentNavigatorTests
         var node = document.DocumentElement.SelectSingleNode("//div/preceding::span");
 
         // Assert
-        node.Should().NotBeNull();
+        node.ShouldNotBeNull();
     }
 
     [Test]
@@ -79,8 +79,8 @@ internal sealed class HtmlDocumentNavigatorTests
         var node = doc.DocumentElement.SelectSingleNode("/urlset/url/link");
 
         // Assert
-        node.Should().NotBeNull();
-        node.NodeName.Should().Be("xhtml:link");
+        node.ShouldNotBeNull();
+        node.NodeName.ShouldBe("xhtml:link");
     }
 
     [Test]
@@ -99,8 +99,8 @@ internal sealed class HtmlDocumentNavigatorTests
         var node = doc.DocumentElement.SelectSingleNode("/d:urlset/d:url/xhtml:link", namespaceManager, false);
 
         // Assert
-        node.Should().NotBeNull();
-        node.NodeName.Should().Be("xhtml:link");
+        node.ShouldNotBeNull();
+        node.NodeName.ShouldBe("xhtml:link");
     }
 
     [Test]
@@ -115,8 +115,8 @@ internal sealed class HtmlDocumentNavigatorTests
         var nodes = doc.DocumentElement.SelectNodes("//@*");
 
         // Assert
-        nodes.Should().HaveCount(2);
-        nodes.Should().AllBeAssignableTo<IAttr>();
+        nodes.Count.ShouldBe(2);
+        nodes.ForEach(e => e.ShouldBeAssignableTo<IAttr>());
     }
 
     [Test]
@@ -130,7 +130,7 @@ internal sealed class HtmlDocumentNavigatorTests
         var xmlNav = angleSharpXmlDoc.CreateNavigator();
 
         // Assert
-        xmlNav.Evaluate("name()").Should().Be(TagNames.Html);
+        xmlNav.Evaluate("name()").ShouldBe(TagNames.Html);
     }
 
     [Test]
@@ -145,7 +145,7 @@ internal sealed class HtmlDocumentNavigatorTests
         var htmlNav = angleSharpHtmlDoc.CreateNavigator();
 
         // Assert
-        htmlNav.Evaluate("name()").Should().Be(TagNames.Html);
+        htmlNav.Evaluate("name()").ShouldBe(TagNames.Html);
     }
 
     [Test]
@@ -164,14 +164,14 @@ internal sealed class HtmlDocumentNavigatorTests
         {
             do
             {
-                nav.NodeType.Should().Be(XPathNodeType.Attribute);
+                nav.NodeType.ShouldBe(XPathNodeType.Attribute);
             }
             while (nav.MoveToNextAttribute());
             nav.MoveToParent();
         }
 
         // Assert
-        nav.Name.Should().Be("root");
+        nav.Name.ShouldBe("root");
     }
 
     [Test]
@@ -193,8 +193,8 @@ internal sealed class HtmlDocumentNavigatorTests
         var div3 = document.DocumentElement.SelectSingleNode("//div[@id='div3']");
 
         // Assert
-        div1.Should().NotBeNull();
-        div2.Should().NotBeNull();
-        div3.Should().NotBeNull();
+        div1.ShouldNotBeNull();
+        div2.ShouldNotBeNull();
+        div3.ShouldNotBeNull();
     }
 }

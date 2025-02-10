@@ -1,7 +1,7 @@
 using AngleSharp.Html.Parser;
-using FluentAssertions;
 using NUnit.Framework;
 using System;
+using Shouldly;
 
 namespace AngleSharp.XPath.Tests;
 
@@ -31,6 +31,6 @@ internal sealed class HtmlDocumentNavigableTests
         var navigator = navigable.CreateNavigator();
 
         // Assert
-        navigator.Should().BeOfType<HtmlDocumentNavigator>();
+        navigator.ShouldBeOfType<HtmlDocumentNavigator>();
     }
 }

@@ -1,6 +1,6 @@
-using FluentAssertions;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using Shouldly;
 
 namespace AngleSharp.XPath.Tests;
 
@@ -15,7 +15,7 @@ internal sealed class XPathConfigurationTests
         var context = BrowsingContext.New(config);
         var document = await context.OpenAsync(res => res.Content(source));
         var elements = document.QuerySelectorAll("*[xpath>'//li']");
-        elements.Should().HaveCount(3);
+        elements.Length.ShouldBe(3);
     }
 
     [Test]
@@ -26,8 +26,8 @@ internal sealed class XPathConfigurationTests
         var context = BrowsingContext.New(config);
         var document = await context.OpenAsync(res => res.Content(source));
         var element = document.QuerySelector("*[xpath>'//li']");
-        element.Should().NotBeNull();
-        element.TagName.Should().Be("LI");
+        element.ShouldNotBeNull();
+        element.TagName.ShouldBe("LI");
     }
 
     [Test]
@@ -38,8 +38,8 @@ internal sealed class XPathConfigurationTests
         var context = BrowsingContext.New(config);
         var document = await context.OpenAsync(res => res.Content(source));
         var element = document.QuerySelector("*[xpath>'//li[2]']");
-        element.Should().NotBeNull();
-        element.TagName.Should().Be("LI");
-        element.ClassName.Should().Be("two");
+        element.ShouldNotBeNull();
+        element.TagName.ShouldBe("LI");
+        element.ClassName.ShouldBe("two");
     }
 }
