@@ -2,7 +2,6 @@
 
 # AngleSharp.XPath
 
-[![Build Status](https://travis-ci.org/AngleSharp/AngleSharp.XPath.svg?branch=master&style=flat-square)](https://travis-ci.org/AngleSharp/AngleSharp.XPath)
 [![GitHub Tag](https://img.shields.io/github/tag/AngleSharp/AngleSharp.XPath.svg?style=flat-square)](https://github.com/AngleSharp/AngleSharp.XPath/releases)
 [![NuGet Count](https://img.shields.io/nuget/dt/AngleSharp.XPath.svg?style=flat-square)](https://www.nuget.org/packages/AngleSharp.XPath/)
 [![Issues Open](https://img.shields.io/github/issues/AngleSharp/AngleSharp.XPath.svg?style=flat-square)](https://github.com/AngleSharp/AngleSharp.XPath/issues)
