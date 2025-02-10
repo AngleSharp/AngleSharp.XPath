@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngleSharp.XPath", "AngleSharp.XPath\AngleSharp.XPath.csproj", "{9ACD9018-0E38-4617-A61E-2F49D8A14E3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngleSharp.XPath", "src\AngleSharp.XPath\AngleSharp.XPath.csproj", "{9ACD9018-0E38-4617-A61E-2F49D8A14E3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngleSharp.XPath.Tests", "AngleSharp.XPath.Tests\AngleSharp.XPath.Tests.csproj", "{9B099D34-CD68-47F5-92F2-DA34567A0223}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngleSharp.XPath.Tests", "src\AngleSharp.XPath.Tests\AngleSharp.XPath.Tests.csproj", "{9B099D34-CD68-47F5-92F2-DA34567A0223}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
