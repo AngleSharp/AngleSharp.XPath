@@ -2,7 +2,6 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using AngleSharp.Xml.Parser;
 using NUnit.Framework;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using Shouldly;
@@ -12,21 +11,6 @@ namespace AngleSharp.XPath.Tests;
 [TestFixture]
 internal sealed class HtmlDocumentNavigatorTests
 {
-    [Test, Retry(5)]
-    public async Task SelectSingleNodeTest()
-    {
-        // Arrange
-        const string address = "https://stackoverflow.com/questions/39471800/is-anglesharps-htmlparser-threadsafe";
-        var config = Configuration.Default.WithDefaultLoader();
-        var document = await BrowsingContext.New(config).OpenAsync(address);
-
-        // Act
-        var content = document.DocumentElement.SelectSingleNode("//div[@id='content']");
-
-        // Assert
-        content.ShouldNotBeNull();
-    }
-
     [Test]
     public void SelectNodes_SelectList_ShouldReturnList()
     {
