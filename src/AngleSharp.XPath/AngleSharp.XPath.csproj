@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.0.7</Version>
-    <AssemblyVersion>2.0.7</AssemblyVersion>
-    <FileVersion>2.0.7</FileVersion>
+    <Version>2.0.8</Version>
+    <AssemblyVersion>2.0.8</AssemblyVersion>
+    <FileVersion>2.0.8</FileVersion>
     <Authors>Denis Ivanov</Authors>
     <PackageId>AngleSharp.XPath</PackageId>
     <AssemblyName>AngleSharp.XPath</AssemblyName>
     <RootNamespace>AngleSharp.XPath</RootNamespace>
     <TargetFrameworks>netstandard2.0;net462;net8.0;net9.0;net10.0</TargetFrameworks>
     <Description>XPath support for AngleSharp</Description>
-    <PackageProjectUrl>https://github.com/AngleSharp/AngleSharp.XPath/</PackageProjectUrl>
+    <PackageProjectUrl>https://anglesharp.github.io/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AngleSharp/AngleSharp.XPath</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>HTML XPath AngleSharp</PackageTags>
     <SignAssembly>true</SignAssembly>
@@ -22,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.8.2" />
+    <PackageReference Include="AngleSharp" Version="1.8.3" />
   </ItemGroup>
 
   <ItemGroup>
