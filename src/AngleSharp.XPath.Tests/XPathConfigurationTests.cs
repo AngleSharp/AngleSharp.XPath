@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using AngleSharp.Css.Parser;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
@@ -55,6 +56,18 @@ internal sealed class XPathConfigurationTests
         document.QuerySelectorAll("*[xpath>'//li']").Length.ShouldBe(3);
         document.QuerySelector("ul").AppendChild(document.CreateElement("li"));
         document.QuerySelectorAll("*[xpath>'//li']").Length.ShouldBe(4);
+    }
+
+    [Test]
+    public async Task RunXPathQueryWithManyMatchesAgainAfterAppendingAnElement()
+    {
+        var source = "<body><ul>" + string.Concat(Enumerable.Repeat("<li>", 20)) + "</ul>";
+        var config = Configuration.Default.WithXPath();
+        var context = BrowsingContext.New(config);
+        var document = await context.OpenAsync(res => res.Content(source));
+        document.QuerySelectorAll("*[xpath>'//li']").Length.ShouldBe(20);
+        document.QuerySelector("ul").AppendChild(document.CreateElement("li"));
+        document.QuerySelectorAll("*[xpath>'//li']").Length.ShouldBe(21);
     }
 
     [Test]
